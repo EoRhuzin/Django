@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pedidos</title>
+    <style>
+        /* Estilos para a tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        /* Estilos para os cabeçalhos da tabela */
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        /* Estilos para as linhas alternadas da tabela */
+        table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Estilos para o cabeçalho da página */
+        h1 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Estilos para os botões */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Pedidos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Valor Total</th>
+                <th>Forma de Pagamento</th>
+                <th>Data do Pedido</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+            <tr>
+                <td>{{ pedido.produto.nome }}</td>
+                <td>{{ pedido.quantidade }}</td>
+                <td>R$ {{ pedido.valor_total }}</td>
+                <td>{{ pedido.get_forma_pagamento_display }}</td>
+                <td>{{ pedido.data_pedido|date:"d/m/Y H:i:s" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="btn-container">
+        <a href="{% url 'lista_produtos' %}" class="btn">Registrar Novo Pedido</a>
+        <a href="{% url 'area_analise' %}" class="btn">Ir para a Área de Análise</a>
+    </div>
+</body>
+</html>

@@ -2,8 +2,7 @@ from django.contrib import admin
 from django import forms
 from .models import Produto, Pedido
 from django.urls import path
-from .views import relatorio_geral
-
+from .views import area_analise
 """class PedidoForm(forms.ModelForm):
     class Meta:
         model = Pedido
@@ -28,7 +27,7 @@ class MeuAdminSite(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
         meu_urls = [
-            path('relatorio-geral/', self.admin_view(relatorio_geral), name='relatorio_geral'),
+            path('relatorio-geral/', self.admin_view(area_analise), name='relatorio_geral'),
         ]
         return meu_urls + urls
 

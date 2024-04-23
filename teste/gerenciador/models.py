@@ -1,4 +1,5 @@
 from django.db import models
+from decimal import Decimal
 
 class Produto(models.Model):
     nome = models.CharField(max_length=100)
@@ -20,9 +21,8 @@ class Pedido(models.Model):
     data_pedido = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        self.valor_total = self.produto.preco * self.quantidade
+        self.valor_total = self.produto.preco * Decimal(self.quantidade)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.produto.nome
-
+        return self.produto.nome 

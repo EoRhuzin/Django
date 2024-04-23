@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Geral</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        strong {
+            color: #000;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Relatório Geral</h1>
+        <p><strong>Quantidade total de vendas:</strong> {{ relatorio.quantidade_total_vendas }}</p>
+        <p><strong>Soma total:</strong> R$ {{ relatorio.soma_total }}</p>
+        <p><strong>Soma PIX:</strong> R$ {{ relatorio.soma_pix }}</p>
+        <p><strong>Soma Dinheiro:</strong> R$ {{ relatorio.soma_dinheiro }}</p>
+        <p><strong>Soma Cartão:</strong> R$ {{ relatorio.soma_cartao }}</p>
+        
+        <!-- Gráfico de Barras -->
+        <canvas id="graficoBarras" width="300" height="300"></canvas> <!-- Elemento do gráfico -->
+
+        <!-- Lista de Todos os Produtos com Quantidades Vendidas -->
+        <h2>Produto Mais Vendido</h2>
+        {% if produto_mais_vendido %}
+            <p><strong>Produto Mais Vendido:</strong> {{ produto_mais_vendido.produto__nome }}</p>
+        {% else %}
+            <p>Nenhum produto vendido ainda.</p>
+        {% endif %}
+        
+        <!-- Lista de Produtos e Quantidades Vendidas -->
+        <h2>Produtos e Quantidades Vendidas</h2>
+        {% if produtos_quantidade_vendida %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade Vendida</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in produtos_quantidade_vendida %}
+                        <tr>
+                            <td>{{ item.produto__nome }}</td>
+                            <td>{{ item.quantidade_vendida }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Nenhum produto vendido ainda.</p>
+        {% endif %}
+        
+        <!-- Gráfico de Barras para Produtos e Quantidades Vendidas -->
+        <canvas id="graficoProdutosQuantidades" width="400" height="200"></canvas> <!-- Elemento do gráfico -->
+
+        <!-- Botão de Exportar PDF -->
+        <div class="total-sales">
+            <p><strong>Total de vendas:</strong> {{ relatorio.quantidade_total_vendas }}</p>
+            <button id="exportar-pdf" class="button">Exportar PDF</button>
+        </div>
+    </div>
+
+    <script>
+        // Dados para o gráfico de barras
+        const dadosGrafico = {
+            labels: ['Soma PIX', 'Soma Dinheiro', 'Soma Cartão'],
+            datasets: [{
+                label: 'Resumo de Vendas',
+                data: [{{ relatorio.soma_pix }}, {{ relatorio.soma_dinheiro }}, {{ relatorio.soma_cartao }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // Dados para o gráfico de barras dos produtos e suas quantidades vendidas
+        const dadosGraficoProdutos = {
+            labels: [{% for item in produtos_quantidade_vendida %}'{{ item.produto__nome }}',{% endfor %}],
+            datasets: [{
+                label: 'Quantidade Vendida',
+                data: [{% for item in produtos_quantidade_vendida %}{{ item.quantidade_vendida }},{% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        // Opções do gráfico de barras
+        const opcoesGrafico = {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Resumo de Vendas por Método de Pagamento'
+                }
+            }
+        };
+
+        // Opções do gráfico de barras dos produtos
+        const opcoesGraficoProdutos = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: true,
+                    text: 'Produtos e Quantidades Vendidas'
+                }
+            }
+        };
+
+        // Renderizar o gráfico de barras
+        var ctx = document.getElementById('graficoBarras').getContext('2d');
+        var graficoBarras = new Chart(ctx, {
+            type: 'bar',
+            data: dadosGrafico,
+            options: opcoesGrafico
+        });
+
+        // Renderizar o gráfico de barras dos produtos
+        var ctxProdutos = document.getElementById('graficoProdutosQuantidades').getContext('2d');
+        var graficoProdutos = new Chart(ctxProdutos, {
+            type: 'bar',
+            data: dadosGraficoProdutos,
+            options: opcoesGraficoProdutos
+        });
+
+        document.getElementById('exportar-pdf').addEventListener('click', function() {
+            const canvas = document.querySelector('#graficoBarras');
+            var pdf = new pdfmake.createPdf({
+                content: [
+                    { text: 'Relatório Geral', fontSize: 16, bold: true, margin: [0, 0, 0, 20] },
+                    { image: canvas.toDataURL(), width: 500 },
+                    { text: 'Produtos e Quantidades Vendidas', fontSize: 14, bold: true, margin: [0, 20, 0, 10] },
+                    { image: document.getElementById('graficoProdutosQuantidades').toDataURL(), width: 500 }
+                ]
+            });
+            pdf.download('relatorio_geral.pdf');
+        });
+    </script>
+</body>
+</html>
