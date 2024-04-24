@@ -1,0 +1,29 @@
+# Arquivos e diretórios padrão a serem ignorados pelo Git
+
+# Ignorar arquivos de bytecode Python
+*.pyc
+__pycache__/
+
+# Ignorar arquivos de configuração de ambiente
+criacao
+
+# Ignorar diretório de arquivos estáticos coletados
+/staticfiles/
+
+# Ignorar diretório de uploads de mídia
+/media/
+
+# Ignorar arquivos de banco de dados SQLite
+db.sqlite3
+
+# Ignorar arquivos de registro
+*.log
+
+# Ignorar arquivos de backup
+*.bak
+*.swp
+*~
+
+# Ignorar arquivos de configuração de IDEs e editores
+.idea/
+.vscode/
