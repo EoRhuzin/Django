@@ -5,55 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Pedidos</title>
     <style>
+        /* Estilos globais */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Estilos para o cabeçalho */
+        h1 {
+            font-size: 28px;
+            color: #45294A; /* Roxo mais escuro para o cabeçalho */
+            text-align: center;
+            margin: 20px 0;
+        }
+        
         /* Estilos para a tabela */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            background-color: #FFFFFF;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
         }
-
+    
         table th,
         table td {
-            padding: 10px;
-            border: 1px solid #ccc;
+            padding: 15px;
+            border-bottom: 1px solid #E6E6E6;
         }
-
+    
         /* Estilos para os cabeçalhos da tabela */
         table th {
-            background-color: #f2f2f2;
+            background-color: #D6ADEB; /* Roxo claro para o cabeçalho da tabela */
+            color: #45294A; /* Roxo mais escuro para o texto do cabeçalho */
+            text-align: left;
         }
-
+    
         /* Estilos para as linhas alternadas da tabela */
         table tbody tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #F6EEF6; /* Roxo muito claro para as linhas alternadas */
         }
-
-        /* Estilos para o cabeçalho da página */
-        h1 {
-            font-size: 24px;
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
+    
         /* Estilos para os botões */
         .btn-container {
             display: flex;
             justify-content: center;
+            margin-top: 20px;
         }
-
+    
         .btn {
             margin: 0 10px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
+            padding: 12px 24px;
+            background-color: #45294A; /* Roxo mais escuro para o botão */
+            color: #FFFFFF;
             text-align: center;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
         }
-
+    
         .btn:hover {
-            background-color: #0056b3;
+            background-color: #6C4A76; /* Roxo mais claro ao passar o mouse */
         }
     </style>
 </head>
@@ -82,8 +101,16 @@
         </tbody>
     </table>
     <div class="btn-container">
-        <a href="{% url 'lista_produtos' %}" class="btn">Registrar Novo Pedido</a>
-        <a href="{% url 'area_analise' %}" class="btn">Ir para a Área de Análise</a>
+        {% if pedidos.has_previous %}
+            <a href="?page=1" class="btn">Primeira Página</a>
+            <a href="?page={{ pedidos.previous_page_number }}" class="btn">Página Anterior</a>
+        {% endif %}
+        {% if pedidos.has_next %}
+            <a href="?page={{ pedidos.next_page_number }}" class="btn">Próxima Página</a>
+            <a href="?page={{ pedidos.paginator.num_pages }}" class="btn">Última Página</a>
+        {% endif %}
+        <a href="{% url 'area_analise' %}" class="btn">Área de Análise</a> <!-- Botão para a área de análise -->
+        <a href="{% url 'vendedor_interface' %}" class="btn">Novo Pedido</a> <!-- Botão para o vendedor -->
     </div>
 </body>
 </html>

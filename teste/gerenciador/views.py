@@ -7,6 +7,8 @@ from django.contrib.auth.models import Group
 from decimal import Decimal
 from django.db.models import Sum
 from django.db.models import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -37,7 +39,17 @@ def lista_produtos(request):
     return render(request, 'gerenciador/lista_produtos.html', {'produtos': produtos})
 
 def lista_pedidos(request):
-    pedidos = Pedido.objects.all()
+    pedidos_list = Pedido.objects.all().order_by('-data_pedido')
+    paginator = Paginator(pedidos_list, 10)  # 10 itens por página
+
+    page = request.GET.get('page')
+    try:
+        pedidos = paginator.page(page)
+    except PageNotAnInteger:
+        pedidos = paginator.page(1)
+    except EmptyPage:
+        pedidos = paginator.page(paginator.num_pages)
+
     return render(request, 'gerenciador/lista_pedidos.html', {'pedidos': pedidos})
 
 def adicionar_produto(request):
@@ -70,11 +82,9 @@ def area_analise(request):
 def area_analise(request):
     # Calcular o produto mais vendido
     produto_mais_vendido = Pedido.objects.values('produto__nome').annotate(quantidade_vendida=Sum('quantidade')).order_by('-quantidade_vendida').first()
-    print(produto_mais_vendido)
     # Calcular a quantidade vendida de cada produto
     produtos_quantidade_vendida = Pedido.objects.values('produto__nome').annotate(quantidade_vendida=Sum('quantidade')).order_by('-quantidade_vendida')
 
-    print(produtos_quantidade_vendida)
     relatorio = calcular_relatorio_geral()
 
     return render(request, 'gerenciador/area_analise.html', {

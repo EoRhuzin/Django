@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login Açai Renata</title>
     <style>
+        /* Estilos globais */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F8F0FF; /* Roxo claro para o fundo */
             margin: 0;
             padding: 0;
             display: flex;
@@ -15,55 +16,63 @@
             align-items: center;
             height: 100vh;
         }
+        /* Container */
         .container {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            background-color: #FFFFFF; /* Branco para o fundo do container */
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            padding: 40px;
             max-width: 400px;
             width: 100%;
             text-align: center;
         }
+        /* Título */
         h1 {
-            color: #333;
-            margin-bottom: 20px;
+            color: #4A235A; /* Roxo escuro para o título */
+            margin-bottom: 30px;
+            font-size: 24px; /* Tamanho do título */
         }
+        /* Formulário */
         form {
             margin-top: 20px;
         }
+        /* Rótulo */
         label {
             display: block;
-            margin-bottom: 8px;
-            color: #666;
+            margin-bottom: 10px;
+            color: #6C3483; /* Roxo médio para o rótulo */
+            font-weight: bold;
         }
+        /* Entrada de texto */
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 12px;
+            border: 1px solid #D7BDE2; /* Roxo claro para a borda da entrada de texto */
+            border-radius: 6px;
             box-sizing: border-box;
             margin-bottom: 20px;
             font-size: 16px;
         }
+        /* Botão */
         button {
-            background-color: #007bff;
-            color: #fff;
+            background-color: #6C3483; /* Roxo médio para o botão */
+            color: #FFFFFF;
             border: none;
-            padding: 12px 20px;
-            border-radius: 4px;
+            padding: 14px 24px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #7D3C98; /* Roxo mais escuro ao passar o mouse */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Login</h1>
+        <h1>Login Açai Renata</h1>
         <form method="post">
             {% csrf_token %}
             <div>

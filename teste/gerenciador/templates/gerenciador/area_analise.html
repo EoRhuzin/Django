@@ -11,19 +11,25 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         .container {
+            width: 90%;
             max-width: 800px;
-            margin: 20px auto;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            border-radius: 10px;
         }
 
         h1 {
             color: #333;
+            margin-bottom: 20px;
         }
 
         p {
@@ -118,6 +124,9 @@
             <p><strong>Total de vendas:</strong> {{ relatorio.quantidade_total_vendas }}</p>
             <button id="exportar-pdf" class="button">Exportar PDF</button>
         </div>
+        
+        <!-- Botão para ver o histórico -->
+        <button onclick="window.location.href='{% url 'lista_pedidos' %}'">Ver Histórico</button>
     </div>
 
     <script>
@@ -197,7 +206,6 @@
             data: dadosGraficoProdutos,
             options: opcoesGraficoProdutos
         });
-
         document.getElementById('exportar-pdf').addEventListener('click', function() {
             const canvas = document.querySelector('#graficoBarras');
             var pdf = new pdfmake.createPdf({
